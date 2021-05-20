@@ -1,30 +1,45 @@
 import os
-
+from os import environ
 import datetime
 
-from dotenv import dotenv_values
-from Get_Data import save_all, get_each_df
+from Get_Data import get_each_df
+from service.file_api import FileAPI
+from service.Models.ins_data import INSData
 
-settings = dotenv_values(".env")
-INS_DATA = settings["INS_DATA"]
-
-#--- se define la ruta --#
-
-
-#--- se define fecha actual ---#
-today = str(datetime.date.today())
+if __name__ == '__main__':
+    path = environ.get('PATH')
+    delta = int(environ.get('TIME_DELTA'))
+    init_date = environ.get('INIT_DATE')
 
 
-#--- Se crea la lista de regiones ---#
-to_report = ['Colombia', 'BOGOTA', 'VALLE', 'ANTIOQUIA', 'MEDELLIN', 'CALI', 'BELLO',
-             'ITAGUI', 'ENVIGADO', 'SABANETA', 'CALDAS', 'COPACABANA', 'LA ESTRELLA',
-             'BARBOSA', 'GIRARDOTA']
+    #--- se define fecha actual ---#
+    final_day = str(datetime.date.today() - datetime.timedelta(days=delta))
 
 
-folder_all = str('reporte_' + today)
-file_id = "2"
+    #--- Se crea la lista de regiones ---#
+    response, is_invalid = FileAPI.get_regions()
+    if is_invalid:
+        print("Not regions found")
+    else:
+        regions = response.get('data')
+        for region in regions:
+            name = region["name"]         
+            file_id = region["hash"]
 
-path = os.path.join(os.getcwd(),INS_DATA,f"{file_id}.csv") #insdata
+            path = os.path.join(path,f"{file_id}.parquet")
 
+            nwdf = get_each_df(name,init_date,final_day,path)
+            
+            nwdf.to_parquet(path,index=False)
 
-save_all(to_report, today, path, get_each_df, file_id )
+            data = INSData(
+                file_id="123",
+                path=path,
+                region=name,
+                init_date=init_date,
+                final_date=final_day
+            )    
+
+            response, is_invalid = FileAPI.insert_data(data)
+            if is_invalid:
+                print(f"No data insertion for {name}")

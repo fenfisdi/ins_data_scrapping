@@ -7,7 +7,7 @@ from service.file_api import FileAPI
 from service.Models.ins_data import INSData
 
 if __name__ == '__main__':
-    path = environ.get('PATH')
+    path = environ.get('PATH_FILES')
     delta = int(environ.get('TIME_DELTA'))
     init_date = environ.get('INIT_DATE')
 

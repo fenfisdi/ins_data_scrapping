@@ -26,9 +26,9 @@ if __name__ == '__main__':
             name = region["name"]         
             file_id = region["hash"]
 
-            path = os.path.join(path,f"{file_id}.parquet")
-
             nwdf = get_each_df(name,init_date,final_day,path)
+
+            path = os.path.join(path,f"{file_id}.parquet")
             
             nwdf.to_parquet(path,index=False)
 

@@ -5,7 +5,7 @@ from hashlib import sha256
 from Regions.region import Region
 
 if __name__ == '__main__':
-        regiones = ['BOGOTA', 'VALLE', 'ANTIOQUIA', 'CARTAGENA', 'HUILA', 'META', 
+        regions = ['BOGOTA', 'VALLE', 'ANTIOQUIA', 'CARTAGENA', 'HUILA', 'META', 
             'RISARALDA', 'NORTE SANTANDER', 'CALDAS', 'CUNDINAMARCA', 'BARRANQUILLA', 'SANTANDER',
             'QUINDIO', 'TOLIMA', 'CAUCA', 'STA MARTA D.E.', 'CESAR', 'SAN ANDRES', 'CASANARE',
             'NARIÑO', 'ATLANTICO', 'BOYACA', 'CORDOBA', 'BOLIVAR', 'SUCRE', 'MAGDALENA', 'GUAJIRA', 
@@ -83,10 +83,11 @@ if __name__ == '__main__':
         mongo_uri = environ.get('MONGO_URI')
         connect(host=mongo_uri)
 
-        for name in regiones:
+        for name in regions:
             reg = Region()
             reg.active=True
             reg.hash=sha256(f"{name}".encode('utf-8')).hexdigest()
             reg.name=name
 
             reg.save()
+        print(f"{len(regions)} regions has been  inserted")

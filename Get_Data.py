@@ -6,9 +6,7 @@ from covidcolombia import Report
 
 def get_each_df(region, init_day, final_day, path):
     '''
-    Función que obtiene las series de tiempo para cada región hasta la fecha dada
-    INPUTS: str - Nombre de la región en mayuscúla, str - Fecha en formato yy-mm-dd, path
-    OUTPUTS: pandas DataFrame 
+    
     '''
     
     #--- creamos report ---#
@@ -24,7 +22,7 @@ def get_each_df(region, init_day, final_day, path):
         active_cases.append(three-two-one)
         
     all_data = np.transpose(np.array([active_cases, infected, recovered, deaths]))
-    df = pd.DataFrame(all_data, columns=['active_cases', 'infected', 'recovered', 'deaths'] )
+    df = pd.DataFrame(all_data, columns=['active_cases', 'I', 'R', 'D'] )
     df['date'] = dates
     
     return df

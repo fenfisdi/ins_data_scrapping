@@ -18,10 +18,10 @@ if __name__ == '__main__':
 
     #--- Se crea la lista de regiones ---#
     response, is_invalid = FileAPI.get_regions()
-    if is_invalid:
+    regions = response.get('data')
+    if is_invalid and len(regions) > 0:
         print("Not regions found")
     else:
-        regions = response.get('data')
         for region in regions:
             name = region["name"]         
             file_id = region["hash"]

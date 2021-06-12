@@ -1,7 +1,6 @@
 from os import environ
 from typing import Union, Tuple
 
-from requests.models import Response
 from service.Models.ins_data import INSData
 
 from .response import to_response, UJSONResponse
@@ -38,7 +37,7 @@ class FileAPI:
             parameters = {
                 'region': region_name
             }
-            
+
         response = cls.request.get(f'/scrapping/regions', parameters=parameters)
         if not response.ok:
             return to_response(response), True

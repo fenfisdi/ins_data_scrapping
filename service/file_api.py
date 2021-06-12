@@ -40,9 +40,9 @@ class FileAPI:
 
         response = cls.request.get(f'/scrapping/regions', parameters=parameters)
         if not response.ok:
-            return to_response(response), True
+            return to_response(response), False
 
-        return response.json(), False
+        return response.json(), True
 
     @classmethod
     def insert_data(
@@ -53,6 +53,6 @@ class FileAPI:
         response = cls.request.post(f'/scrapping/Data', data=data.__dict__)
 
         if not response.ok:
-            return to_response(response), True
+            return to_response(response), False
 
-        return response.json(), False
+        return response.json(), True

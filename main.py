@@ -27,13 +27,13 @@ if __name__ == '__main__':
 
             new_df.to_parquet(path, index=False)
             data = INSData(
-                    file_id = str(final_date),
+                    file_id = file_id,
                     path = path,
                     region = name,
                     init_date = init_date,
                     final_date = final_date
                     )
 
-            response, is_invalid = FileAPI.insert_data(data)
-            if is_invalid:
+            response, is_valid = FileAPI.insert_data(data)
+            if is_valid:
                 print(f'No new data added for {name}')

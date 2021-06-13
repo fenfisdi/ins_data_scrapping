@@ -2,7 +2,6 @@ import datetime
 import os
 
 from Get_Data import get_each_df
-from service.Models.ins_data import INSData
 from service.file_api import FileAPI
 
 
@@ -22,18 +21,18 @@ if __name__ == '__main__':
             name = region['name']
             file_id = region['hash']
 
-            new_df = get_each_df(name, init_date, final_date, path)
-            path = os.path.join(path, f"{file_id}.parquet")
+            new_df = get_each_df(name, init_date, final_date, file_path)
 
-            new_df.to_parquet(path, index=False)
-            data = INSData(
-                    file_id = file_id,
-                    path = path,
-                    region = name,
-                    init_date = init_date,
-                    final_date = final_date
-                    )
+            file_bin = new_df.to_parquet(path=None, index=False)
+            data = {
+                    "file_id":file_id,
+                    "file":str(file_bin),
+                    "region":name,
+                    "init_date":init_date,
+                    "final_date":final_date
+                }
+                    
 
             response, is_valid = FileAPI.insert_data(data)
-            if is_valid:
+            if not is_valid:
                 print(f'No new data added for {name}')

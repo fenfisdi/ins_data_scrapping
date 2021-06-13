@@ -1,8 +1,6 @@
 from os import environ
 from typing import Union, Tuple
 
-from service.Models.ins_data import INSData
-
 from .response import to_response, UJSONResponse
 from .service import API, APIService
 
@@ -47,10 +45,10 @@ class FileAPI:
     @classmethod
     def insert_data(
         cls,
-        data: INSData
+        data: dict
         ) -> Tuple[Union[dict, UJSONResponse], bool]:
 
-        response = cls.request.post(f'/scrapping/Data', data=data.__dict__)
+        response = cls.request.post(f'/scrapping/Data', data=data)
 
         if not response.ok:
             return to_response(response), False

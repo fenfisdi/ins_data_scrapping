@@ -1,5 +1,6 @@
 import datetime
 import os
+from io import BytesIO
 
 from Get_Data import get_each_df
 from service.file_api import FileAPI
@@ -22,15 +23,17 @@ if __name__ == '__main__':
             file_id = region['hash']
 
             new_df = get_each_df(name, init_date, final_date, file_path)
+            
+            data_file = new_df.to_csv(index=False)
+            
 
-            file_bin = new_df.to_parquet(path=None, index=False)
             data = {
                     "file_id":file_id,
-                    "file":str(file_bin),
+                    "file":data_file,
                     "region":name,
                     "init_date":init_date,
                     "final_date":final_date
-                }
+            }
                     
 
             response, is_valid = FileAPI.insert_data(data)

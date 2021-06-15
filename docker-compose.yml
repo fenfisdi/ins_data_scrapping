@@ -1,0 +1,18 @@
+version: "3.5"
+services:
+  auth_app:
+    build: .
+    container_name: ins_scrapper
+    env_file: .env
+    image: fenfisdi/ins_web_scrapping:feat/docker
+    networks:
+      - ins_scrapper
+    ports:
+      - 8080:8080
+    volumes:
+    - ./src:/app/src
+
+networks:
+  ins_scrapper:
+    name: ins_web_scrapping
+    driver: bridge

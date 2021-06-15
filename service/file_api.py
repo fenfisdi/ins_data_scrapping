@@ -1,9 +1,6 @@
 from os import environ
 from typing import Union, Tuple
 
-from requests.models import Response
-from service.Models.ins_data import INSData
-
 from .response import to_response, UJSONResponse
 from .service import API, APIService
 
@@ -38,22 +35,22 @@ class FileAPI:
             parameters = {
                 'region': region_name
             }
-            
+
         response = cls.request.get(f'/scrapping/regions', parameters=parameters)
         if not response.ok:
-            return to_response(response), True
+            return to_response(response), False
 
-        return response.json(), False
+        return response.json(), True
 
     @classmethod
     def insert_data(
         cls,
-        data: INSData
+        data: dict
         ) -> Tuple[Union[dict, UJSONResponse], bool]:
 
-        response = cls.request.post(f'/scrapping/Data', data=data.__dict__)
+        response = cls.request.post(f'/scrapping/Data', data=data)
 
         if not response.ok:
-            return to_response(response), True
+            return to_response(response), False
 
-        return response.json(), False
+        return response.json(), True
